@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riffusion Linter</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/material-darker.min.css">
+</head>
+<body class="bg-gray-900 text-white">
+    <header class="bg-gradient-to-r from-purple-900 to-blue-900 py-4 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="text-3xl font-bold gradient-text">Riffusion Linter</div>
+                </div>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="#" class="hover:text-purple-300 transition" data-section="editor">Editor</a></li>
+                        <li><a href="#" class="hover:text-purple-300 transition" data-section="templates">Templates</a></li>
+                        <li><a href="#" class="hover:text-purple-300 transition" data-section="help">Help</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Editor Section -->
+        <section id="editor-section" class="mb-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="editor-container bg-gray-800 rounded-lg shadow-lg p-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold">Riffusion Prompt</h2>
+                        <div>
+                            <button id="load-example" class="px-3 py-1 bg-blue-700 hover:bg-blue-600 rounded-md transition">Load Example</button>
+                            <button id="clear-editor" class="px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded-md transition ml-2">Clear</button>
+                        </div>
+                    </div>
+                    <textarea id="editor" class="w-full h-96"></textarea>
+                    <div class="flex justify-end mt-4">
+                        <button id="analyze-button" class="px-4 py-2 bg-purple-700 hover:bg-purple-600 rounded-lg font-medium transition">Analyze Prompt</button>
+                    </div>
+                </div>
+
+                <div class="results-container bg-gray-800 rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-semibold mb-4">Analysis Results</h2>
+                    <div id="results-panel" class="space-y-6">
+                        <div class="result-placeholder text-gray-500 italic text-center mt-20">
+                            Enter a Riffusion prompt and click "Analyze Prompt" to see results
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="visualizer-container bg-gray-800 rounded-lg shadow-lg p-6 mt-6">
+                <h2 class="text-xl font-semibold mb-4">Prompt Visualization</h2>
+                <div id="visualization-panel" class="h-64 relative">
+                    <div class="visualization-placeholder text-gray-500 italic text-center mt-20">
+                        Visualization will appear here after analysis
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Templates Section -->
+        <section id="templates-section" class="hidden">
+            <h2 class="text-2xl font-bold mb-6">Vocal Style Templates</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Template Cards -->
+                <div class="template-card bg-gray-800 rounded-lg shadow hover:shadow-purple-500/30 transition p-5">
+                    <h3 class="text-xl font-semibold text-purple-300 mb-2">Metal Screams & Growls</h3>
+                    <p class="mb-4 text-gray-300">Dynamic template with clean vocals to growls progression</p>
+                    <div class="space-y-2 mb-4">
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Metal</div>
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Aggressive</div>
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Screamed</div>
+                    </div>
+                    <button class="template-load-btn px-3 py-1 bg-purple-700 hover:bg-purple-600 rounded-md text-sm transition" data-template="metal">Load Template</button>
+                </div>
+
+                <div class="template-card bg-gray-800 rounded-lg shadow hover:shadow-purple-500/30 transition p-5">
+                    <h3 class="text-xl font-semibold text-purple-300 mb-2">Ethereal Whispers</h3>
+                    <p class="mb-4 text-gray-300">Soft, ambient template with layered whispered vocals</p>
+                    <div class="space-y-2 mb-4">
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Ambient</div>
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Whispered</div>
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Layered</div>
+                    </div>
+                    <button class="template-load-btn px-3 py-1 bg-purple-700 hover:bg-purple-600 rounded-md text-sm transition" data-template="ethereal">Load Template</button>
+                </div>
+
+                <div class="template-card bg-gray-800 rounded-lg shadow hover:shadow-purple-500/30 transition p-5">
+                    <h3 class="text-xl font-semibold text-purple-300 mb-2">Pop Dynamic Range</h3>
+                    <p class="mb-4 text-gray-300">Standard pop vocal structure with verse-chorus dynamics</p>
+                    <div class="space-y-2 mb-4">
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Pop</div>
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Clean</div>
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Dynamic</div>
+                    </div>
+                    <button class="template-load-btn px-3 py-1 bg-purple-700 hover:bg-purple-600 rounded-md text-sm transition" data-template="pop">Load Template</button>
+                </div>
+
+                <div class="template-card bg-gray-800 rounded-lg shadow hover:shadow-purple-500/30 transition p-5">
+                    <h3 class="text-xl font-semibold text-purple-300 mb-2">Emotional Ballad</h3>
+                    <p class="mb-4 text-gray-300">Expressive vocals with varied emotional intensity</p>
+                    <div class="space-y-2 mb-4">
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Ballad</div>
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Emotional</div>
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Expressive</div>
+                    </div>
+                    <button class="template-load-btn px-3 py-1 bg-purple-700 hover:bg-purple-600 rounded-md text-sm transition" data-template="ballad">Load Template</button>
+                </div>
+
+                <div class="template-card bg-gray-800 rounded-lg shadow hover:shadow-purple-500/30 transition p-5">
+                    <h3 class="text-xl font-semibold text-purple-300 mb-2">Rap Flow Variation</h3>
+                    <p class="mb-4 text-gray-300">Hip-hop template with varied flow and delivery styles</p>
+                    <div class="space-y-2 mb-4">
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Rap</div>
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Flow</div>
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Rhythmic</div>
+                    </div>
+                    <button class="template-load-btn px-3 py-1 bg-purple-700 hover:bg-purple-600 rounded-md text-sm transition" data-template="rap">Load Template</button>
+                </div>
+
+                <div class="template-card bg-gray-800 rounded-lg shadow hover:shadow-purple-500/30 transition p-5">
+                    <h3 class="text-xl font-semibold text-purple-300 mb-2">Custom Template</h3>
+                    <p class="mb-4 text-gray-300">Create and save your own template</p>
+                    <div class="space-y-2 mb-4">
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">Custom</div>
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">User</div>
+                        <div class="tag bg-gray-700 inline-block px-2 py-1 rounded text-sm">New</div>
+                    </div>
+                    <button class="px-3 py-1 bg-blue-700 hover:bg-blue-600 rounded-md text-sm transition" id="create-template">Create New</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Help Section -->
+        <section id="help-section" class="hidden">
+            <h2 class="text-2xl font-bold mb-6">Riffusion Linter Help</h2>
+            
+            <div class="bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
+                <h3 class="text-xl font-semibold text-purple-300 mb-4">Getting Started</h3>
+                <p class="mb-4">The Riffusion Linter helps you create better vocal prompts for Riffusion AI music generation. Paste your lyrics with style instructions in the editor, and the linter will analyze them for potential issues and improvements.</p>
+                
+                <h4 class="text-lg font-medium text-blue-300 mt-6 mb-3">Basic Syntax</h4>
+                <div class="bg-gray-900 p-4 rounded-md mb-4">
+                    <code class="text-sm">
+                        [clean vocals 85bpm] Your lyrics here<br>
+                        [whispered] These words are whispered<br>
+                        [screamed] THESE WORDS ARE SCREAMED
+                    </code>
+                </div>
+                
+                <h4 class="text-lg font-medium text-blue-300 mt-6 mb-3">Advanced Features</h4>
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Use <code class="bg-gray-700 px-1 rounded">&lt;cresc&gt;</code> and <code class="bg-gray-700 px-1 rounded">&lt;dim&gt;</code> tags for gradual intensity changes</li>
+                    <li>Add <code class="bg-gray-700 px-1 rounded">[with (background vocals)]</code> for layering</li>
+                    <li>Use <code class="bg-gray-700 px-1 rounded">[start whispered] gradually building [end screamed]</code> for transitions</li>
+                </ul>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-purple-300 mb-4">Common Issues</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-medium text-blue-300 mb-2">Unbalanced Tags</h4>
+                            <p class="text-gray-300">Make sure all opening tags <code class="bg-gray-700 px-1 rounded">[tag]</code> are properly matched.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-blue-300 mb-2">Conflicting Instructions</h4>
+                            <p class="text-gray-300">Avoid contradictory directions like <code class="bg-gray-700 px-1 rounded">[whispered screaming]</code>.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-blue-300 mb-2">Abrupt Changes</h4>
+                            <p class="text-gray-300">Use transition instructions between dramatically different styles.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-purple-300 mb-4">Tips for Better Results</h3>
+                    <ul class="list-disc pl-5 space-y-3 text-gray-300">
+                        <li>Be specific with descriptors (use "falsetto" instead of "high")</li>
+                        <li>Include tempo information (80bpm, 120bpm, etc.)</li>
+                        <li>Reference specific vocal techniques when possible</li>
+                        <li>Create a natural emotional arc throughout your song</li>
+                        <li>Use the visualization to check your dynamic range</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="bg-gray-800 rounded-lg shadow-lg p-6 mt-6">
+                <h3 class="text-xl font-semibold text-purple-300 mb-4">Video Tutorial</h3>
+                <div class="aspect-w-16 aspect-h-9 bg-gray-900 rounded flex items-center justify-center">
+                    <p class="text-gray-500">Tutorial video placeholder</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 border-t border-gray-800 py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-400">© 2025 Riffusion Linter - An AI music generation tool</p>
+                </div>
+                <div>
+                    <ul class="flex space-x-6">
+                        <li><a href="#" class="text-gray-400 hover:text-purple-300 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-300 transition">Terms of Use</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-300 transition">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for template creation -->
+    <div id="template-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Create New Template</h3>
+                <button id="close-modal" class="text-gray-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">Template Name</label>
+                    <input type="text" id="template-name" class="w-full bg-gray-700 text-white px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                    <textarea id="template-description" class="w-full bg-gray-700 text-white px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 h-20"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">Tags (comma separated)</label>
+                    <input type="text" id="template-tags" class="w-full bg-gray-700 text-white px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">Template Content</label>
+                    <textarea id="template-content" class="w-full bg-gray-700 text-white px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 h-32"></textarea>
+                </div>
+                <div class="flex justify-end mt-2">
+                    <button id="save-template" class="px-4 py-2 bg-purple-700 hover:bg-purple-600 rounded text-white transition">Save Template</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="linter.js"></script>
+    <script src="templates.js"></script>
+    <script src="visualizer.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

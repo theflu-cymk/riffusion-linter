@@ -1,0 +1,166 @@
+
+/* Main Styles */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+}
+
+.gradient-text {
+    background: linear-gradient(to right, #c084fc, #60a5fa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Editor Styles */
+.CodeMirror {
+    height: 100%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    border-radius: 0.5rem;
+}
+
+/* Results Panel Styling */
+.result-item {
+    border-left: 4px solid;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.result-error {
+    border-color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+.result-warning {
+    border-color: #f59e0b;
+    background-color: rgba(245, 158, 11, 0.1);
+}
+
+.result-suggestion {
+    border-color: #3b82f6;
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Visualization Styles */
+.intensity-bar {
+    position: absolute;
+    bottom: 0;
+    width: 8px;
+    background: linear-gradient(to top, #c084fc, #818cf8);
+    border-radius: 4px 4px 0 0;
+    transition: height 0.3s ease;
+}
+
+.vocal-type-label {
+    position: absolute;
+    bottom: -25px;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: #a1a1aa;
+    text-align: center;
+    width: 60px;
+}
+
+.intensity-guide {
+    position: absolute;
+    width: 100%;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+    left: 0;
+}
+
+.intensity-guide-label {
+    position: absolute;
+    left: -40px;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: #71717a;
+}
+
+/* Template Card Styles */
+.template-card {
+    transition: all 0.3s ease;
+}
+
+.template-card:hover {
+    transform: translateY(-5px);
+}
+
+.tag {
+    transition: all 0.2s ease;
+}
+
+.template-card:hover .tag {
+    background-color: #4b5563;
+}
+
+/* Tooltip Styles */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #374151;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    font-size: 12px;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #374151 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Animated Elements */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(192, 132, 252, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(192, 132, 252, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(192, 132, 252, 0);
+    }
+}
+
+.analyze-button-active {
+    animation: pulse 1.5s infinite;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .intensity-guide-label {
+        display: none;
+    }
+    
+    .vocal-type-label {
+        font-size: 8px;
+        width: 40px;
+    }
+}
